@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# large directories 
+/vendor
+
+# garbage
+.DS_Store
