@@ -38,6 +38,7 @@
 /include
 /lib 
 Makefile
+LICENCE
 
 # garbage
 .DS_Store 
