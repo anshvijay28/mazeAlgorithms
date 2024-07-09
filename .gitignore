@@ -31,8 +31,13 @@
 *.out
 *.app
 
-# large directories 
+# pre-installed from template
 /vendor
+/bin
+/docs
+/include
+/lib 
+Makefile
 
 # garbage
-.DS_Store
+.DS_Store 
