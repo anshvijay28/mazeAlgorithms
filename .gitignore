@@ -42,3 +42,4 @@ LICENCE
 
 # garbage
 .DS_Store 
+.vscode/
