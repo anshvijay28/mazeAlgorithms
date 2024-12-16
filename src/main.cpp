@@ -30,14 +30,15 @@ std::vector<Coords> getNeighbors(Coords& curr, Set visited)
     // get neighbors
     for (auto& new_coords : neis)
     {
-        auto [r, c] = new_coords;
+        auto [row, col] = new_coords;
         
         // bounds check
-        if (r < 0 || r >= NUM_CELLS || c < 0 || c >= NUM_CELLS) 
+        if (row < 0 || row >= NUM_CELLS || col < 0 || col >= NUM_CELLS) 
             continue;
 
         // visited check
-        Coords coords(r, c);
+        Coords coords(row, col);
+
         if (visited.count(coords)) 
             continue;
         
@@ -53,8 +54,10 @@ Grid randomizedDFS(Grid& grid)
     Set visited;
     Stack S;
 
-    // start with random cell, mark as visited and push to stack
-    Coords coords(std::rand() % NUM_CELLS, std::rand() % NUM_CELLS);
+    // start with random cell, mark as visited and push to stack    
+    int r = (std::rand() % (NUM_CELLS / 2)) * 2;
+    int c = (std::rand() % (NUM_CELLS / 2)) * 2;
+    Coords coords(r, c);
 
     S.push(coords);
     visited.insert(coords);
