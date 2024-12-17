@@ -30,8 +30,9 @@ std::vector<Coords> getNeighbors(Coords& curr, Set visited)
     return neighbors;
 }
 
-Grid randomizedDFS(Grid& grid)
+Grid randomizedDFS()
 {
+    Grid grid = initGrid();
 
     Set visited;
     Stack S;

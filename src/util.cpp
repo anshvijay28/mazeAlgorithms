@@ -1,7 +1,21 @@
-#include <stdlib.h>
-#include <iostream>
-#include <raylib-cpp.hpp>
 #include "util.h"
+
+Color getColor(int state) {
+    switch (state) {
+        case 0: return BLACK;
+        case 1: return RAYWHITE;
+        case 2: return RED;
+        default: return BLACK;
+    }
+}
+
+Grid addSolution(std::vector<Coords>& path, Grid maze) 
+{
+    for (Coords& coord : path)
+        maze[std::get<0>(coord)][std::get<1>(coord)] = 2;
+    
+    return maze;
+}
 
 void printMaze(Grid& maze)
 {
@@ -15,7 +29,6 @@ void printMaze(Grid& maze)
     }
 }
 
-// util
 Grid initGrid() 
 {
     Grid grid;
@@ -32,7 +45,6 @@ Grid initGrid()
     return grid;
 }
 
-// util
 void drawGrid(Grid& grid)
 {
     int x = BORDER_SIZE;
@@ -42,7 +54,7 @@ void drawGrid(Grid& grid)
         x = BORDER_SIZE;
         for (int j = 0; j < NUM_CELLS; j++) 
         {   
-            Color color = grid[i][j] ? RAYWHITE : BLACK;
+            Color color = getColor(grid[i][j]);
             DrawRectangle(x, y, CELL_SIZE, CELL_SIZE, color);    
             x += CELL_SIZE;
         }     

@@ -1,6 +1,7 @@
 #include <raylib-cpp.hpp>
 #include <iostream>
 #include "mazeGen.h"
+#include "solveAlgos.h"
 
 
 int main() 
@@ -8,15 +9,16 @@ int main()
     raylib::Window w(SCREEN_WIDTH, SCREEN_WIDTH, "Maze Generation");
     SetTargetFPS(60);
 
-    Grid init_grid = initGrid();
-    Grid dfs_maze = randomizedDFS(init_grid);
+    Grid dfsMaze = randomizedDFS();
+    std::vector<Coords> solution = dfs(dfsMaze);
+    Grid solvedDfsMaze = addSolution(solution, dfsMaze);
 
     while (!w.ShouldClose())
     {
         BeginDrawing();
 
         ClearBackground(BLACK);
-        drawGrid(dfs_maze);
+        drawGrid(solvedDfsMaze);
         
         EndDrawing();
     }
