@@ -13,6 +13,7 @@ constexpr int CELL_SIZE = 15;
 constexpr int SCREEN_WIDTH = 865;
 constexpr int SCREEN_HEIGHT = 865;
 constexpr int NUM_CELLS = (SCREEN_WIDTH - (2 * BORDER_SIZE)) / CELL_SIZE;
+constexpr float ANIMATION_SPEED = 0.001;
 
 using Grid = std::array<std::array<int, NUM_CELLS>, NUM_CELLS>;
 using Coords = std::tuple<int, int>;
@@ -30,5 +31,7 @@ void printMaze(Grid& maze);
 Grid initGrid();
 
 void drawGrid(Grid& grid);
+
+void drawMazeFrame(std::vector<Coords>& mazeCells, Grid& maze, int frame);
 
 #endif

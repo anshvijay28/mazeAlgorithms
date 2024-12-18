@@ -62,3 +62,18 @@ void drawGrid(Grid& grid)
     }
     return; 
 }
+
+void drawMazeFrame(std::vector<Coords>& mazeCells, Grid& maze, int frame)
+{
+    BeginDrawing();
+    ClearBackground(BLACK);
+
+    Coords coords = mazeCells.at(frame);
+    int r = std::get<0>(coords);
+    int c = std::get<1>(coords);
+    
+    maze[r][c] = 1;
+    drawGrid(maze);
+    
+    EndDrawing();
+}
