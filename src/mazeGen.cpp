@@ -30,9 +30,9 @@ std::vector<Coords> getNeighbors(Coords& curr, Set visited)
     return neighbors;
 }
 
-Grid randomizedDFS()
+std::vector<Coords> randomizedDFS()
 {
-    Grid grid = initGrid();
+    std::vector<Coords> mazeCells;
 
     Set visited;
     Stack S;
@@ -45,13 +45,10 @@ Grid randomizedDFS()
     S.push(coords);
     visited.insert(coords);
 
-
-    // while stack not empty
     while (!S.empty())
     {
         Coords curr = S.top();
 
-        // get neighbors
         std::vector<Coords> neighbors = getNeighbors(curr, visited);        
     
         if (!neighbors.size()) 
@@ -76,12 +73,19 @@ Grid randomizedDFS()
         if (curr_r == nei_r) col = curr_c + (nei_c > curr_c ? 1 : -1);
         if (curr_c == nei_c) row = curr_r + (nei_r > curr_r ? 1 : -1);
 
-        grid[row][col] = 1;
+        // add wall to be removed to mazeCells
+        mazeCells.push_back(Coords(col, row));
 
         // push new cell onto stack and visited set
         S.push(neighbor);
         visited.insert(neighbor);
     }
 
-    return grid;
+    return mazeCells;
 }
+
+// i want these algos to return an array of the transformed cells
+// and then write some sort of animation function, animating the grid at each addition of each cell
+    // the animation function would draw the grid at each step
+    // and also return the final grid
+    // so I wouldn't need an "addMaze" function i guess, bc by the end of animation you'll have added the grid
