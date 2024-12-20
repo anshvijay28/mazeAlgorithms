@@ -101,3 +101,11 @@ bool checkButtonClick(int cornerX, int cornerY, float x, float y)
         IsMouseButtonPressed(MOUSE_BUTTON_LEFT)
     );
 }
+
+void drawPauseScreen()
+{
+    DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Color{0, 0, 0, 210});
+    Rectangle btn = {452, 407, BUTTON_WIDTH, BUTTON_HEIGHT};
+    DrawRectangleRounded(btn, 1, 8, RED);
+    DrawText("Resume", 452 + 45, 407 + 7, 35, BLACK);
+}

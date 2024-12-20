@@ -12,7 +12,7 @@ constexpr int BORDER_SIZE = 20;
 constexpr int CELL_SIZE = 15;
 constexpr int SIDEBAR_WIDTH = 250;
 constexpr int SCREEN_HEIGHT = 865;
-constexpr int SCREEN_WIDTH = 865 + SIDEBAR_WIDTH;
+constexpr int SCREEN_WIDTH = 865 + SIDEBAR_WIDTH;  // 1115
 constexpr int NUM_CELLS = (SCREEN_HEIGHT - (2 * BORDER_SIZE)) / CELL_SIZE;
 constexpr float ANIMATION_SPEED = 0.001;
 constexpr Rectangle SIDEBAR = {240, 15, 10, SCREEN_HEIGHT - 30};
@@ -48,5 +48,7 @@ void drawDivider(Color color);
 void drawMazeBorder(Color color);
 
 bool checkButtonClick(int cornerX, int cornerY, float x, float y);
+
+void drawPauseScreen();
 
 #endif

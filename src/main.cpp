@@ -12,6 +12,7 @@ int main()
     CoordsVec mazeCells = randomizedDFS();
     Grid maze = initGrid();
     int frame = 0;
+    bool paused = false;
 
     while (!w.ShouldClose())
     {
@@ -21,7 +22,7 @@ int main()
         auto [x, y] = GetMousePosition();
 
         // draw maze border
-        drawMazeBorder(BLUE);
+        drawMazeBorder(BLACK);
 
         // draw buttons
         drawButton(BUTTON_X_OFFSET, BUTTON_Y_OFFSET, RED);  // Pause
@@ -35,18 +36,22 @@ int main()
 
         // animate maze
         drawMazeFrame(mazeCells, maze, frame % mazeCells.size());
-        frame += 1;
+        
+        // make shift ternary to check paused state
+        if (paused) drawPauseScreen(); else frame++;
 
         // check for button clicks
-        if (checkButtonClick(BUTTON_X_OFFSET, BUTTON_Y_OFFSET, x, y))
-        {
-            std::cout << "Pause" << std::endl;    
-        } 
-        else if (checkButtonClick(BUTTON_X_OFFSET, BUTTON_Y_OFFSET + 80, x, y))
+        if (
+            (checkButtonClick(BUTTON_X_OFFSET, BUTTON_Y_OFFSET, x, y) && !paused)  // pause
+            || (checkButtonClick(452, 407, x, y) && paused)  // resume
+        )
+            paused = !paused;
+    
+        else if (checkButtonClick(BUTTON_X_OFFSET, BUTTON_Y_OFFSET + 80, x, y) && !paused)
         {
             std::cout << "Skip" << std::endl;
         } 
-        else if (checkButtonClick(BUTTON_X_OFFSET, BUTTON_Y_OFFSET + 160, x, y))
+        else if (checkButtonClick(BUTTON_X_OFFSET, BUTTON_Y_OFFSET + 160, x, y) && !paused)
         {
             std::cout << "Solution" << std::endl;
         }
@@ -56,6 +61,11 @@ int main()
     return 0;
 }
 
-// add pause functionality
+// add pause functionality DONE
+    // make the animation pause
+    // add a blocking screen
+    // add a resume button
+
+
 // add skip functionality
 // animate solution
