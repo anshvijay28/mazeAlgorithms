@@ -9,10 +9,13 @@ int main()
     raylib::Window w(SCREEN_WIDTH, SCREEN_HEIGHT, "Maze Generation");
     SetTargetFPS(60);    
 
-    CoordsVec mazeCells = randomizedDFS();
     Grid maze = initGrid();
+    CoordsVec mazeCells = randomizedDFS();
+    Grid finishedMaze = getFullMaze(mazeCells, maze);
+
     int frame = 0;
     bool paused = false;
+    bool skipped = false;
 
     while (!w.ShouldClose())
     {
@@ -35,10 +38,16 @@ int main()
         DrawText("Solution", BUTTON_X_OFFSET + 40, BUTTON_Y_OFFSET + 160 + 7, 35, BLACK);
 
         // animate maze
-        drawMazeFrame(mazeCells, maze, frame % mazeCells.size());
+        if (!skipped) 
+            drawMazeFrame(mazeCells, maze, frame % mazeCells.size()); 
+        else 
+            drawGrid(finishedMaze);
         
-        // make shift ternary to check paused state
-        if (paused) drawPauseScreen(); else frame++;
+        // paused state
+        if (paused) 
+            drawPauseScreen(); 
+        else 
+            frame++;
 
         // check for button clicks
         if (
@@ -49,6 +58,7 @@ int main()
     
         else if (checkButtonClick(BUTTON_X_OFFSET, BUTTON_Y_OFFSET + 80, x, y) && !paused)
         {
+            skipped = true;
             std::cout << "Skip" << std::endl;
         } 
         else if (checkButtonClick(BUTTON_X_OFFSET, BUTTON_Y_OFFSET + 160, x, y) && !paused)
@@ -61,11 +71,4 @@ int main()
     return 0;
 }
 
-// add pause functionality DONE
-    // make the animation pause
-    // add a blocking screen
-    // add a resume button
-
-
-// add skip functionality
 // animate solution
