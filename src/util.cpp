@@ -9,10 +9,18 @@ Color getColor(int state) {
     }
 }
 
-Grid addSolution(CoordsVec& path, Grid maze) 
+Grid getSolution(CoordsVec& path, Grid maze) 
 {
     for (Coords& coord : path)
         maze[std::get<0>(coord)][std::get<1>(coord)] = 2;
+    
+    return maze;
+}
+
+Grid getFullMaze(CoordsVec& mazeCells, Grid maze)
+{
+    for (Coords& coord : mazeCells)
+        maze[std::get<0>(coord)][std::get<1>(coord)] = 1;
     
     return maze;
 }

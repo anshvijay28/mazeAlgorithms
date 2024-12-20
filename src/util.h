@@ -31,7 +31,9 @@ using Pstack = std::stack<CoordsVec>;
 
 Color getColor(int state);
 
-Grid addSolution(CoordsVec& path, Grid maze);
+Grid getSolution(CoordsVec& path, Grid maze);
+
+Grid getFullMaze(CoordsVec& mazeCells, Grid maze);
 
 void printMaze(Grid& maze);
 
