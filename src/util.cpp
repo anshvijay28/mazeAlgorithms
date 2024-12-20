@@ -47,11 +47,11 @@ Grid initGrid()
 
 void drawGrid(Grid& grid)
 {
-    int x = BORDER_SIZE;
+    int x = BORDER_SIZE + SIDEBAR_WIDTH;
     int y = BORDER_SIZE;
     for (int i = 0; i < NUM_CELLS; i++)
     {
-        x = BORDER_SIZE;
+        x = BORDER_SIZE + SIDEBAR_WIDTH;
         for (int j = 0; j < NUM_CELLS; j++) 
         {   
             Color color = getColor(grid[i][j]);
@@ -65,15 +65,39 @@ void drawGrid(Grid& grid)
 
 void drawMazeFrame(std::vector<Coords>& mazeCells, Grid& maze, int frame)
 {
-    BeginDrawing();
-    ClearBackground(BLACK);
-
     Coords coords = mazeCells.at(frame);
     int r = std::get<0>(coords);
     int c = std::get<1>(coords);
     
     maze[r][c] = 1;
-    drawGrid(maze);
-    
-    EndDrawing();
+    drawGrid(maze);   
+}
+
+void drawButton(float x, float y, Color color)
+{
+    Rectangle btn = {x, y, BUTTON_WIDTH, BUTTON_HEIGHT};
+    DrawRectangleRounded(btn, 1, 8, color);
+}
+
+void drawDivider(Color color)
+{
+    Rectangle sidebar = {240, 15, 10, SCREEN_HEIGHT - 30};
+    DrawRectangleRounded(sidebar, 1, 8, BLUE);
+}
+
+void drawMazeBorder(Color color)
+{   
+    DrawRectangle(265, 15, 5, SCREEN_HEIGHT - 30, color);  // left
+    DrawRectangle(SIDEBAR_WIDTH + SCREEN_HEIGHT - 20, 15, 5, SCREEN_HEIGHT - 30, color);  // right
+    DrawRectangle(270, 15, SCREEN_HEIGHT - 40, 5, color);  // top
+    DrawRectangle(270, SCREEN_HEIGHT - 20, SCREEN_HEIGHT - 40, 5, color);  // bottom    
+}
+
+bool checkButtonClick(int cornerX, int cornerY, float x, float y)
+{
+    return (
+        cornerX <= x && x <= cornerX + BUTTON_WIDTH &&
+        cornerY <= y && y <= cornerY + BUTTON_HEIGHT &&
+        IsMouseButtonPressed(MOUSE_BUTTON_LEFT)
+    );
 }

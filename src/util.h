@@ -10,10 +10,16 @@
 
 constexpr int BORDER_SIZE = 20;
 constexpr int CELL_SIZE = 15;
-constexpr int SCREEN_WIDTH = 865;
+constexpr int SIDEBAR_WIDTH = 250;
 constexpr int SCREEN_HEIGHT = 865;
-constexpr int NUM_CELLS = (SCREEN_WIDTH - (2 * BORDER_SIZE)) / CELL_SIZE;
+constexpr int SCREEN_WIDTH = 865 + SIDEBAR_WIDTH;
+constexpr int NUM_CELLS = (SCREEN_HEIGHT - (2 * BORDER_SIZE)) / CELL_SIZE;
 constexpr float ANIMATION_SPEED = 0.001;
+constexpr Rectangle SIDEBAR = {240, 15, 10, SCREEN_HEIGHT - 30};
+constexpr int BUTTON_WIDTH = 210;
+constexpr int BUTTON_HEIGHT = 50;
+constexpr int BUTTON_X_OFFSET = 30;
+constexpr int BUTTON_Y_OFFSET = 315;
 
 using Grid = std::array<std::array<int, NUM_CELLS>, NUM_CELLS>;
 using Coords = std::tuple<int, int>;
@@ -33,5 +39,13 @@ Grid initGrid();
 void drawGrid(Grid& grid);
 
 void drawMazeFrame(std::vector<Coords>& mazeCells, Grid& maze, int frame);
+
+void drawButton(float x, float y, Color color);
+
+void drawDivider(Color color);
+
+void drawMazeBorder(Color color);
+
+bool checkButtonClick(int cornerX, int cornerY, float x, float y);
 
 #endif
