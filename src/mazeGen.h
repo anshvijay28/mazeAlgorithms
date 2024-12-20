@@ -1,5 +1,5 @@
 #include "util.h"
 
-std::vector<Coords> getNeighbors(Coords& curr, Set visited);
+CoordsVec getNeighbors(Coords& curr, Set visited);
 
-std::vector<Coords> randomizedDFS();
+CoordsVec randomizedDFS();

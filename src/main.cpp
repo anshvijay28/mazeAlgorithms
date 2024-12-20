@@ -9,7 +9,7 @@ int main()
     raylib::Window w(SCREEN_WIDTH, SCREEN_HEIGHT, "Maze Generation");
     SetTargetFPS(60);    
 
-    std::vector<Coords> mazeCells = randomizedDFS();
+    CoordsVec mazeCells = randomizedDFS();
     Grid maze = initGrid();
     int frame = 0;
 

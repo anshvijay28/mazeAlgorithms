@@ -1,18 +1,18 @@
 #include "solveAlgos.h"
 
-std::vector<Coords> dfs(Grid& maze)
+CoordsVec dfs(Grid& maze)
 {  
     Pstack stack;
     Set visited;
 
     Coords initCoords(NUM_CELLS - 1, 0);
-    stack.push(std::vector<Coords>{initCoords});
+    stack.push(CoordsVec{initCoords});
     visited.insert(initCoords);
 
     while (!stack.empty())
     {
         // pop off current path
-        std::vector<Coords> path = stack.top();
+        CoordsVec path = stack.top();
         stack.pop();
 
         // check if current path reached destination
@@ -37,7 +37,7 @@ std::vector<Coords> dfs(Grid& maze)
                 continue;
 
             // valid neighbor case
-            std::vector<Coords> newPath(path);
+            CoordsVec newPath(path);
             newPath.push_back(Coords(row, col));
 
             // add to stack and visited set
@@ -48,5 +48,5 @@ std::vector<Coords> dfs(Grid& maze)
 
     std::cout << "There were no valid neighbors" << std::endl;
 
-    return std::vector<Coords>(); 
+    return CoordsVec(); 
 }

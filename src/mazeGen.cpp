@@ -1,8 +1,8 @@
 #include "mazeGen.h"
 
-std::vector<Coords> getNeighbors(Coords& curr, Set visited) 
+CoordsVec getNeighbors(Coords& curr, Set visited) 
 {
-    std::vector<Coords> neighbors;
+    CoordsVec neighbors;
 
     int r = std::get<0>(curr);
     int c = std::get<1>(curr);
@@ -30,9 +30,9 @@ std::vector<Coords> getNeighbors(Coords& curr, Set visited)
     return neighbors;
 }
 
-std::vector<Coords> randomizedDFS()
+CoordsVec randomizedDFS()
 {
-    std::vector<Coords> mazeCells;
+    CoordsVec mazeCells;
 
     Set visited;
     Stack S;
@@ -49,7 +49,7 @@ std::vector<Coords> randomizedDFS()
     {
         Coords curr = S.top();
 
-        std::vector<Coords> neighbors = getNeighbors(curr, visited);        
+        CoordsVec neighbors = getNeighbors(curr, visited);        
     
         if (!neighbors.size()) 
         {

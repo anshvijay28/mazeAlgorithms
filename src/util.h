@@ -23,14 +23,15 @@ constexpr int BUTTON_Y_OFFSET = 315;
 
 using Grid = std::array<std::array<int, NUM_CELLS>, NUM_CELLS>;
 using Coords = std::tuple<int, int>;
+using CoordsVec = std::vector<Coords>;
 struct hashFunction { size_t operator()(const Coords& x) const { return std::get<0>(x) ^ std::get<1>(x); }}; 
 using Set = std::unordered_set<Coords, hashFunction>;
 using Stack = std::stack<Coords>;
-using Pstack = std::stack<std::vector<Coords>>;
+using Pstack = std::stack<CoordsVec>;
 
 Color getColor(int state);
 
-Grid addSolution(std::vector<Coords>& path, Grid maze);
+Grid addSolution(CoordsVec& path, Grid maze);
 
 void printMaze(Grid& maze);
 
@@ -38,7 +39,7 @@ Grid initGrid();
 
 void drawGrid(Grid& grid);
 
-void drawMazeFrame(std::vector<Coords>& mazeCells, Grid& maze, int frame);
+void drawMazeFrame(CoordsVec& mazeCells, Grid& maze, int frame);
 
 void drawButton(float x, float y, Color color);
 

@@ -9,7 +9,7 @@ Color getColor(int state) {
     }
 }
 
-Grid addSolution(std::vector<Coords>& path, Grid maze) 
+Grid addSolution(CoordsVec& path, Grid maze) 
 {
     for (Coords& coord : path)
         maze[std::get<0>(coord)][std::get<1>(coord)] = 2;
@@ -63,7 +63,7 @@ void drawGrid(Grid& grid)
     return; 
 }
 
-void drawMazeFrame(std::vector<Coords>& mazeCells, Grid& maze, int frame)
+void drawMazeFrame(CoordsVec& mazeCells, Grid& maze, int frame)
 {
     Coords coords = mazeCells.at(frame);
     int r = std::get<0>(coords);
