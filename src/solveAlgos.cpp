@@ -1,9 +1,10 @@
 #include "solveAlgos.h"
 
-CoordsVec dfs(Grid& maze)
+std::vector<CoordsVec> dfs(Grid& maze)
 {  
     Pstack stack;
     Set visited;
+    std::vector<CoordsVec> sols;
 
     Coords initCoords(NUM_CELLS - 1, 0);
     stack.push(CoordsVec{initCoords});
@@ -15,13 +16,17 @@ CoordsVec dfs(Grid& maze)
         CoordsVec path = stack.top();
         stack.pop();
 
+        // add this *considered* solution to sols for animation
+        CoordsVec pathCopy(path);
+        sols.push_back(pathCopy);
+
         // check if current path reached destination
         Coords currCell = path.at(path.size() - 1);
         int r = std::get<0>(currCell);
         int c = std::get<1>(currCell);
         
         if (r == 0 && c == NUM_CELLS - 1) 
-            return path;
+            return sols;
 
         // get neighbors
         std::vector<std::array<int, 2>> neis = {{r + 1, c}, {r - 1, c}, {r, c + 1}, {r, c - 1}};
@@ -30,9 +35,9 @@ CoordsVec dfs(Grid& maze)
             auto [row, col] = newCoords;
 
             if (
-                row >= NUM_CELLS || r < 0 || 
-                c >= NUM_CELLS || c < 0 || 
-                !maze[r][c] || visited.count(Coords(row, col))
+                row >= NUM_CELLS || row < 0 || 
+                col >= NUM_CELLS || col < 0 || 
+                !maze[row][col] || visited.count(Coords(row, col))
             )
                 continue;
 
@@ -48,5 +53,5 @@ CoordsVec dfs(Grid& maze)
 
     std::cout << "There were no valid neighbors" << std::endl;
 
-    return CoordsVec(); 
+    return sols;
 }

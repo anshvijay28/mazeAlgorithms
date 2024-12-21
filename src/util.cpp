@@ -81,6 +81,13 @@ void drawMazeFrame(CoordsVec& mazeCells, Grid& maze, int frame)
     drawGrid(maze);   
 }
 
+void drawSolutionFrame(std::vector<CoordsVec>& paths, Grid& maze, int frame)
+{
+    CoordsVec path = paths.at(frame);
+    Grid mazeWithPath = getSolution(path, maze);
+    drawGrid(mazeWithPath);
+}
+
 void drawButton(float x, float y, Color color)
 {
     Rectangle btn = {x, y, BUTTON_WIDTH, BUTTON_HEIGHT};
