@@ -43,6 +43,8 @@ void drawGrid(Grid& grid);
 
 void drawMazeFrame(CoordsVec& mazeCells, Grid& maze, int frame);
 
+void drawSolutionFrame(std::vector<CoordsVec>& paths, Grid& maze, int frame);
+
 void drawButton(float x, float y, Color color);
 
 void drawDivider(Color color);

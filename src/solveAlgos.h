@@ -1,3 +1,3 @@
 #include "util.h"
 
-CoordsVec dfs(Grid& maze);
+std::vector<CoordsVec> dfs(Grid& maze);
