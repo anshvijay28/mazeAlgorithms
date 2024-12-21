@@ -9,6 +9,7 @@ int main()
     raylib::Window w(SCREEN_WIDTH, SCREEN_HEIGHT, "Maze Generation");
     SetTargetFPS(60);    
 
+    // init maze
     Grid maze = initGrid();
     CoordsVec mazeCells = randomizedDFS();
     Grid finishedMaze = getFullMaze(mazeCells, maze);
@@ -16,6 +17,7 @@ int main()
     CoordsVec solution = mazeSolutions.at(mazeSolutions.size() - 1);
     Grid mazeWithSolution = getSolution(solution, finishedMaze);
 
+    // init game state
     int mazeFrame = 0;
     int solutionFrame = 0;
     bool paused = false;
@@ -36,11 +38,13 @@ int main()
         drawButton(BUTTON_X_OFFSET, BUTTON_Y_OFFSET, RED);  // Pause
         drawButton(BUTTON_X_OFFSET, BUTTON_Y_OFFSET + 80, RED);  // Skip 
         drawButton(BUTTON_X_OFFSET, BUTTON_Y_OFFSET + 160, RED);  // Solution
+        drawButton(BUTTON_X_OFFSET, BUTTON_Y_OFFSET + 240, RED);  // Restart
 
         // draw text
         DrawText("Pause", BUTTON_X_OFFSET + 50, BUTTON_Y_OFFSET + 7, 35, BLACK);
         DrawText("Skip", BUTTON_X_OFFSET + 70, BUTTON_Y_OFFSET + 80 + 7, 35, BLACK);
         DrawText("Solution", BUTTON_X_OFFSET + 40, BUTTON_Y_OFFSET + 160 + 7, 35, BLACK);
+        DrawText("Restart", BUTTON_X_OFFSET + 40, BUTTON_Y_OFFSET + 240 + 7, 35, BLACK);
 
         // button logic (ugly)
         if (paused)
@@ -87,18 +91,24 @@ int main()
         }
 
         // check for button clicks
-        if (
-            (checkButtonClick(BUTTON_X_OFFSET, BUTTON_Y_OFFSET, x, y) && !paused)  // pause
-            || (checkButtonClick(452, 407, x, y) && paused)  // resume
-        )
-            paused = !paused;
-        else if (checkButtonClick(BUTTON_X_OFFSET, BUTTON_Y_OFFSET + 80, x, y) && !paused)
-            skipped = true;
-        else if (
-            checkButtonClick(BUTTON_X_OFFSET, BUTTON_Y_OFFSET + 160, x, y) && 
-            !paused && mazeFrame == mazeCells.size() - 1
-        )
-            sol = !sol;
+        bool pauseClick = checkButtonClick(BUTTON_X_OFFSET, BUTTON_Y_OFFSET, x, y);
+        bool resumeClick = checkButtonClick(452, 407, x, y);
+        bool skippedClick = checkButtonClick(BUTTON_X_OFFSET, BUTTON_Y_OFFSET + 80, x, y);
+        bool solutionClick = checkButtonClick(BUTTON_X_OFFSET, BUTTON_Y_OFFSET + 160, x, y);
+        bool resetClick = checkButtonClick(BUTTON_X_OFFSET, BUTTON_Y_OFFSET + 240, x, y);
+
+        if ((pauseClick && !paused) || resumeClick) paused = !paused; 
+        else if (skippedClick && !paused) skipped = true;
+        else if (solutionClick && !paused && mazeFrame == mazeCells.size() - 1) sol = !sol;
+        else if (resetClick)
+        {
+            resetMaze(
+                maze, mazeCells, finishedMaze, 
+                mazeSolutions, solution, mazeWithSolution, 
+                randomizedDFS, dfs
+            );
+            resetGameState(mazeFrame, solutionFrame, paused, skipped, sol);
+        }
             
         EndDrawing();
     }

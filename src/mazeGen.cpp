@@ -83,9 +83,3 @@ CoordsVec randomizedDFS()
 
     return mazeCells;
 }
-
-// i want these algos to return an array of the transformed cells
-// and then write some sort of animation function, animating the grid at each addition of each cell
-    // the animation function would draw the grid at each step
-    // and also return the final grid
-    // so I wouldn't need an "addMaze" function i guess, bc by the end of animation you'll have added the grid

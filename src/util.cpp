@@ -124,3 +124,31 @@ void drawPauseScreen()
     DrawRectangleRounded(btn, 1, 8, RED);
     DrawText("Resume", 452 + 45, 407 + 7, 35, BLACK);
 }
+
+void resetGameState(int& mazeFrame, int& solutionFrame, bool& paused, bool& skipped, bool& sol)
+{   
+    mazeFrame = 0;
+    solutionFrame = 0;
+    paused = false;
+    skipped = false;
+    sol = false;
+}
+
+void resetMaze(
+    Grid &maze,
+    CoordsVec &mazeCells, 
+    Grid &finishedMaze, 
+    std::vector<CoordsVec> &mazeSolutions, 
+    CoordsVec &solution, 
+    Grid &mazeWithSolution,
+    CoordsVec (*mazeGenAlgo)(),
+    std::vector<CoordsVec> (*mazeSolveAlgo)(Grid&)
+)
+{
+    maze = initGrid();
+    mazeCells = mazeGenAlgo();  // paramerterize
+    finishedMaze = getFullMaze(mazeCells, maze);
+    mazeSolutions = mazeSolveAlgo(finishedMaze); // paramerterize
+    solution = mazeSolutions.at(mazeSolutions.size() - 1);
+    mazeWithSolution = getSolution(solution, finishedMaze);
+}
