@@ -66,12 +66,15 @@ bool checkButtonClick(int cornerX, int cornerY, float x, float y);
 
 void drawPauseScreen();
 
+void drawWinScreen();
+
 void resetGameState(
     int &mazeFrame, 
     int &solutionFrame, 
     bool &paused, 
     bool &skipped, 
-    bool &sol
+    bool &sol,
+    bool &win
 );
 
 void resetMaze(

@@ -17,11 +17,12 @@ int main()
 
     // init game state
     int mazeFrame, solutionFrame; 
-    bool paused, skipped, sol;
-    resetGameState(mazeFrame, solutionFrame, paused, skipped, sol);
+    bool paused, skipped, sol, win;
+    resetGameState(mazeFrame, solutionFrame, paused, skipped, sol, win);
 
     // init player
-    Player player = { NUM_CELLS - 1, 0 };
+    // Player player = { NUM_CELLS - 1, 0 };
+    Player player = { 0, NUM_CELLS - 3 };
 
     while (!w.ShouldClose())
     {
@@ -47,9 +48,13 @@ int main()
         DrawText("Reset", BUTTON_X_OFFSET + 55, BUTTON_Y_OFFSET + 240 + 7, 35, BLACK);
         DrawText("Restart", BUTTON_X_OFFSET + 40, BUTTON_Y_OFFSET + 320 + 7, 35, BLACK);
         
-        // button logic
+        // win check
+        if (player.r == 0 && player.c == NUM_CELLS - 1)
+            win = true;        
+        
         removePlayer(maze, player.r, player.c);
-
+        
+        // button logic
         if (skipped)
         {   
             if (mazeFrame < mazeCells.size() - 1) 
@@ -91,7 +96,9 @@ int main()
             movePlayer(maze, player.r, player.c);
         }
 
-        paused ? drawPauseScreen() : drawGrid(maze); 
+        if (paused) drawPauseScreen();
+        if (win) drawWinScreen();
+        else drawGrid(maze);
 
         // check for button clicks
         bool pauseClick = checkButtonClick(BUTTON_X_OFFSET, BUTTON_Y_OFFSET, x, y);
@@ -100,21 +107,24 @@ int main()
         bool solutionClick = checkButtonClick(BUTTON_X_OFFSET, BUTTON_Y_OFFSET + 160, x, y);
         bool resetClick = checkButtonClick(BUTTON_X_OFFSET, BUTTON_Y_OFFSET + 240, x, y);
         bool restartClick = checkButtonClick(BUTTON_X_OFFSET, BUTTON_Y_OFFSET + 320, x, y);
+        bool winRestartClick = checkButtonClick(452, 307, x, y);
 
-        if (pauseClick || resumeClick) paused = !paused; 
-        else if (skippedClick && !paused) skipped = true;
-        else if (solutionClick && !paused && mazeFrame == mazeCells.size() - 1) sol = !sol;
-        else if (resetClick)
+        if (!win && pauseClick || resumeClick) paused = !paused; 
+        else if (!win && skippedClick && !paused) skipped = true;
+        else if (!win && solutionClick && !paused && mazeFrame == mazeCells.size() - 1) sol = !sol;
+        else if (!win && resetClick)
         {
             removePlayer(maze, player.r, player.c);
             player.r = NUM_CELLS - 1;
             player.c = 0;
         }
-        else if (restartClick)
+        else if ((!win && restartClick) || (win && winRestartClick))
         {
             resetMaze(maze, mazeCells, mazeSolutions, randomizedDFS, dfs);
-            resetGameState(mazeFrame, solutionFrame, paused, skipped, sol);
+            resetGameState(mazeFrame, solutionFrame, paused, skipped, sol, win);
             resetPlayer(&player);
+
+            if (win && winRestartClick) win = !win;
         }
             
         EndDrawing();
