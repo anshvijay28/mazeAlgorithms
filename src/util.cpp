@@ -9,19 +9,28 @@ Color getColor(int state) {
     }
 }
 
-Grid getSolution(CoordsVec& path, Grid maze) 
+void addSolutionFrame(CoordsVec &path, Grid &maze) 
 {
     for (Coords& coord : path)
-        maze[std::get<0>(coord)][std::get<1>(coord)] = 2;
-    
-    return maze;
+        maze[std::get<0>(coord)][std::get<1>(coord)] = 2;    
 }
 
-Grid getFullMaze(CoordsVec& mazeCells, Grid maze)
+void removeSolutionFrame(CoordsVec &path, Grid &maze) 
+{
+    for (Coords& coord : path)
+        maze[std::get<0>(coord)][std::get<1>(coord)] = 1;    
+}
+
+void finishMaze(CoordsVec mazeCells, Grid &maze)
+{
+    for (Coords& coord : mazeCells)
+        maze[std::get<0>(coord)][std::get<1>(coord)] = 1;    
+}
+
+Grid getFinishedMaze(CoordsVec mazeCells, Grid maze)
 {
     for (Coords& coord : mazeCells)
         maze[std::get<0>(coord)][std::get<1>(coord)] = 1;
-    
     return maze;
 }
 
@@ -53,7 +62,7 @@ Grid initGrid()
     return grid;
 }
 
-void drawGrid(Grid& grid)
+void drawGrid(Grid &grid)
 {
     int x = BORDER_SIZE + SIDEBAR_WIDTH;
     int y = BORDER_SIZE;
@@ -71,21 +80,18 @@ void drawGrid(Grid& grid)
     return; 
 }
 
-void drawMazeFrame(CoordsVec& mazeCells, Grid& maze, int frame)
-{
-    Coords coords = mazeCells.at(frame);
-    int r = std::get<0>(coords);
-    int c = std::get<1>(coords);
-    
-    maze[r][c] = 1;
-    drawGrid(maze);   
+void addMazeFrame(Coords mazeCell, Grid &maze)
+{    
+    maze[std::get<0>(mazeCell)][std::get<1>(mazeCell)] = 1;
 }
 
-void drawSolutionFrame(std::vector<CoordsVec>& paths, Grid& maze, int frame)
+
+// TO BE REMOVED
+void addSolutionFrame(std::vector<CoordsVec> &paths, Grid &maze, int frame)
 {
     CoordsVec path = paths.at(frame);
-    Grid mazeWithPath = getSolution(path, maze);
-    drawGrid(mazeWithPath);
+    addSolutionFrame(path, maze);
+    // drawGrid(maze);
 }
 
 void drawButton(float x, float y, Color color)
@@ -125,7 +131,13 @@ void drawPauseScreen()
     DrawText("Resume", 452 + 45, 407 + 7, 35, BLACK);
 }
 
-void resetGameState(int& mazeFrame, int& solutionFrame, bool& paused, bool& skipped, bool& sol)
+void resetGameState(
+    int &mazeFrame, 
+    int &solutionFrame, 
+    bool &paused, 
+    bool &skipped, 
+    bool &sol
+)
 {   
     mazeFrame = 0;
     solutionFrame = 0;
@@ -137,18 +149,13 @@ void resetGameState(int& mazeFrame, int& solutionFrame, bool& paused, bool& skip
 void resetMaze(
     Grid &maze,
     CoordsVec &mazeCells, 
-    Grid &finishedMaze, 
-    std::vector<CoordsVec> &mazeSolutions, 
-    CoordsVec &solution, 
-    Grid &mazeWithSolution,
+    std::vector<CoordsVec> &mazeSolutions,
     CoordsVec (*mazeGenAlgo)(),
-    std::vector<CoordsVec> (*mazeSolveAlgo)(Grid&)
+    std::vector<CoordsVec> (*mazeSolveAlgo)(Grid)
 )
 {
     maze = initGrid();
-    mazeCells = mazeGenAlgo();  // paramerterize
-    finishedMaze = getFullMaze(mazeCells, maze);
-    mazeSolutions = mazeSolveAlgo(finishedMaze); // paramerterize
-    solution = mazeSolutions.at(mazeSolutions.size() - 1);
-    mazeWithSolution = getSolution(solution, finishedMaze);
+    mazeCells = mazeGenAlgo();
+    Grid finishedMaze = getFinishedMaze(mazeCells, maze);
+    mazeSolutions = mazeSolveAlgo(finishedMaze);
 }
