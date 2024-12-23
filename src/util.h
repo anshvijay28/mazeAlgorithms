@@ -34,9 +34,13 @@ using Pstack = std::stack<CoordsVec>;
 
 Color getColor(int state);
 
-Grid getSolution(CoordsVec &path, Grid maze);
+void addSolutionFrame(CoordsVec &path, Grid &maze);
 
-Grid getFullMaze(CoordsVec &mazeCells, Grid maze);
+void removeSolutionFrame(CoordsVec &path, Grid &maze);
+
+void finishMaze(CoordsVec mazeCells, Grid &maze);
+
+Grid getFinishedMaze(CoordsVec mazeCells, Grid maze);
 
 void printMaze(Grid &maze);
 
@@ -44,9 +48,9 @@ Grid initGrid();
 
 void drawGrid(Grid &grid);
 
-void drawMazeFrame(CoordsVec &mazeCells, Grid &maze, int frame);
+void addMazeFrame(Coords mazeCells, Grid &maze);
 
-void drawSolutionFrame(std::vector<CoordsVec> &paths, Grid &maze, int frame);
+void addSolutionFrame(std::vector<CoordsVec> &paths, Grid &maze, int frame);  // REMOVE THIS
 
 void drawButton(float x, float y, Color color);
 
@@ -62,13 +66,10 @@ void resetGameState(int &mazeFrame, int &solutionFrame, bool &paused, bool &skip
 
 void resetMaze(
     Grid &maze, 
-    CoordsVec &mazeCells, 
-    Grid &finishedMaze, 
+    CoordsVec &mazeCells,
     std::vector<CoordsVec> &mazeSolutions, 
-    CoordsVec &solution, 
-    Grid &mazeWithSolution,
     CoordsVec (*mazeGenAlgo)(),
-    std::vector<CoordsVec> (*mazeSolveAlgo)(Grid&)   
+    std::vector<CoordsVec> (*mazeSolveAlgo)(Grid)   
 );
 
 #endif

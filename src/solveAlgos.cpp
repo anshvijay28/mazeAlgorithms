@@ -1,7 +1,8 @@
 #include "solveAlgos.h"
 
-std::vector<CoordsVec> dfs(Grid& maze)
+std::vector<CoordsVec> dfs(Grid maze)
 {  
+    
     Pstack stack;
     Set visited;
     std::vector<CoordsVec> sols;

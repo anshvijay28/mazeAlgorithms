@@ -10,19 +10,16 @@ int main()
     SetTargetFPS(60);    
 
     // init maze
-    Grid maze = initGrid();
-    CoordsVec mazeCells = randomizedDFS();
-    Grid finishedMaze = getFullMaze(mazeCells, maze);
-    std::vector<CoordsVec> mazeSolutions = dfs(finishedMaze);
-    CoordsVec solution = mazeSolutions.at(mazeSolutions.size() - 1);
-    Grid mazeWithSolution = getSolution(solution, finishedMaze);
+    Grid maze, finishedMaze;
+    CoordsVec mazeCells;
+    std::vector<CoordsVec> mazeSolutions;
+    resetMaze(maze, mazeCells, mazeSolutions, randomizedDFS, dfs);
 
     // init game state
-    int mazeFrame = 0;
-    int solutionFrame = 0;
-    bool paused = false;
-    bool skipped = false;
-    bool sol = false;
+    int mazeFrame, solutionFrame; 
+    bool paused, skipped, sol;
+    resetGameState(mazeFrame, solutionFrame, paused, skipped, sol);
+    
 
     while (!w.ShouldClose())
     {
@@ -46,49 +43,45 @@ int main()
         DrawText("Solution", BUTTON_X_OFFSET + 40, BUTTON_Y_OFFSET + 160 + 7, 35, BLACK);
         DrawText("Restart", BUTTON_X_OFFSET + 40, BUTTON_Y_OFFSET + 240 + 7, 35, BLACK);
 
-        // button logic (ugly)
-        if (paused)
-        {    
-            drawPauseScreen();
-        }
-        else if (skipped)
-        {
+        // button logic
+        if (skipped)
+        {   
             if (mazeFrame < mazeCells.size() - 1) 
             {
+                finishMaze(mazeCells, maze);
                 mazeFrame = mazeCells.size() - 1;
             }
             else if (solutionFrame < mazeSolutions.size() - 1 && sol) 
             {
+                removeSolutionFrame(mazeSolutions.at(solutionFrame), maze);
                 solutionFrame = mazeSolutions.size() - 1;
             }
             skipped = false;
         }
         else if (sol)
         {
-            if (mazeFrame < mazeCells.size() - 1) continue;
+            if (mazeFrame < mazeCells.size() - 1) 
+                continue;
+
+            if (solutionFrame > 0)
+                removeSolutionFrame(mazeSolutions.at(solutionFrame - 1), maze);
+            addSolutionFrame(mazeSolutions.at(solutionFrame), maze);
             
-            if (solutionFrame == mazeSolutions.size() - 1) 
-            {
-                drawGrid(mazeWithSolution);
-            }
-            else
-            {
-                drawSolutionFrame(mazeSolutions, finishedMaze, solutionFrame);
+            if (solutionFrame < mazeSolutions.size() - 1) 
                 solutionFrame++;
-            }
         }
         else
-        {
-            if (mazeFrame == mazeCells.size() - 1)
-            {
-                drawGrid(finishedMaze);
-            }
-            else 
-            {
-                drawMazeFrame(mazeCells, maze, mazeFrame);    
-                mazeFrame++;
-            } 
+        {   
+            removeSolutionFrame(mazeSolutions.at(solutionFrame), maze);
+            addMazeFrame(mazeCells.at(mazeFrame), maze);
+
+            if (mazeFrame < mazeCells.size() - 1) 
+                mazeFrame++;            
         }
+
+        // insert user position into maze here
+
+        paused ? drawPauseScreen() : drawGrid(maze); 
 
         // check for button clicks
         bool pauseClick = checkButtonClick(BUTTON_X_OFFSET, BUTTON_Y_OFFSET, x, y);
@@ -97,16 +90,12 @@ int main()
         bool solutionClick = checkButtonClick(BUTTON_X_OFFSET, BUTTON_Y_OFFSET + 160, x, y);
         bool resetClick = checkButtonClick(BUTTON_X_OFFSET, BUTTON_Y_OFFSET + 240, x, y);
 
-        if ((pauseClick && !paused) || resumeClick) paused = !paused; 
+        if (pauseClick || resumeClick) paused = !paused; 
         else if (skippedClick && !paused) skipped = true;
         else if (solutionClick && !paused && mazeFrame == mazeCells.size() - 1) sol = !sol;
         else if (resetClick)
         {
-            resetMaze(
-                maze, mazeCells, finishedMaze, 
-                mazeSolutions, solution, mazeWithSolution, 
-                randomizedDFS, dfs
-            );
+            resetMaze(maze, mazeCells, mazeSolutions, randomizedDFS, dfs);
             resetGameState(mazeFrame, solutionFrame, paused, skipped, sol);
         }
             
