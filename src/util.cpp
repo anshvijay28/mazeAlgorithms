@@ -122,12 +122,35 @@ void drawPauseScreen()
     DrawText("Resume", 452 + 45, 407 + 7, 35, BLACK);
 }
 
+void drawWinScreen()
+{
+    DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Color{0, 0, 0, 210});
+    Rectangle restartBtn = {452, 307, BUTTON_WIDTH, BUTTON_HEIGHT};
+    DrawRectangleRounded(restartBtn, 1, 8, RED);
+
+    Rectangle numMoves = {452, 387, BUTTON_WIDTH, BUTTON_HEIGHT};
+    DrawRectangleRounded(numMoves, 1, 8, GRAY);
+
+    Rectangle time = {452, 467, BUTTON_WIDTH, BUTTON_HEIGHT};
+    DrawRectangleRounded(time, 1, 8, GRAY);
+
+    Rectangle algosPage = {452, 547, BUTTON_WIDTH, BUTTON_HEIGHT};
+    DrawRectangleRounded(algosPage, 1, 8, RED);
+
+    DrawText("Restart", 452 + 40, 307 + 7, 35, BLACK);
+    DrawText("Moves: ", 452 + 20, 387 + 12, 25, BLACK);
+    DrawText("Time: ", 452 + 20, 467 + 12, 25, BLACK);
+    DrawText("Algos", 452 + 50, 547 + 7, 35, BLACK);
+}
+
+
 void resetGameState(
     int &mazeFrame, 
     int &solutionFrame, 
     bool &paused, 
     bool &skipped, 
-    bool &sol
+    bool &sol,
+    bool &win
 )
 {   
     mazeFrame = 0;
@@ -135,6 +158,7 @@ void resetGameState(
     paused = false;
     skipped = false;
     sol = false;
+    win = false;
 }
 
 void resetMaze(
