@@ -5,6 +5,7 @@ Color getColor(int state) {
         case 0: return BLACK;
         case 1: return RAYWHITE;
         case 2: return RED;
+        case 3: return BLUE;
         default: return BLACK;
     }
 }
@@ -77,21 +78,11 @@ void drawGrid(Grid &grid)
         }     
         y += CELL_SIZE;   
     }
-    return; 
 }
 
 void addMazeFrame(Coords mazeCell, Grid &maze)
 {    
     maze[std::get<0>(mazeCell)][std::get<1>(mazeCell)] = 1;
-}
-
-
-// TO BE REMOVED
-void addSolutionFrame(std::vector<CoordsVec> &paths, Grid &maze, int frame)
-{
-    CoordsVec path = paths.at(frame);
-    addSolutionFrame(path, maze);
-    // drawGrid(maze);
 }
 
 void drawButton(float x, float y, Color color)
@@ -158,4 +149,73 @@ void resetMaze(
     mazeCells = mazeGenAlgo();
     Grid finishedMaze = getFinishedMaze(mazeCells, maze);
     mazeSolutions = mazeSolveAlgo(finishedMaze);
+}
+
+void handlePlayerMovement(Player *player, Grid maze)
+{
+    // want to be able to hold arrow keys
+
+    if (
+        IsKeyDown(KEY_RIGHT) && 
+        player->c < NUM_CELLS - 1 && 
+        maze[player->r][player->c + 1]
+    ) 
+        player->c += 1;
+
+    if (
+        IsKeyDown(KEY_LEFT) && 
+        player->c > 0 && 
+        maze[player->r][player->c - 1]
+    ) 
+        player->c -= 1;
+
+    if (
+        IsKeyDown(KEY_UP) && 
+        player->r > 0 &&
+        maze[player->r - 1][player->c]
+    ) 
+        player->r -= 1;
+
+    if (
+        IsKeyDown(KEY_DOWN) && 
+        player->r < NUM_CELLS - 1 && 
+        maze[player->r + 1][player->c]
+    ) 
+        player->r += 1;
+}
+
+void movePlayer(Grid &maze, int r, int c)
+{
+    // erase prev position
+    std::vector<std::array<int, 2>> neis = {
+        {r + 1, c}, {r - 1, c}, {r, c + 1}, {r, c - 1}
+    };
+
+    for (auto &nei : neis)
+    {
+        auto [row, col] = nei;
+        
+        if (
+            row < 0 || row == NUM_CELLS || 
+            col < 0 || col == NUM_CELLS
+        )
+            continue;
+        
+        if (maze[row][col] == 3)
+            maze[row][col] = 1;
+    }
+
+    // draw new pos
+    maze[r][c] = 3;
+}
+
+void removePlayer(Grid &maze, int r, int c)
+{
+    maze[r][c] = 1;
+}
+
+void resetPlayer(Player *player)
+{
+    player->r = NUM_CELLS - 1;
+    player->c = 0;
 }

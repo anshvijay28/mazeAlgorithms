@@ -24,6 +24,11 @@ constexpr int BUTTON_Y_OFFSET = 315;
 using Grid = std::array<std::array<int, NUM_CELLS>, NUM_CELLS>;
 using Coords = std::tuple<int, int>;
 using CoordsVec = std::vector<Coords>;
+struct Player 
+{
+    int r;
+    int c;
+};
 struct hashFunction
 {
     size_t operator()(const Coords &x) const { return std::get<0>(x) ^ std::get<1>(x); }
@@ -50,8 +55,6 @@ void drawGrid(Grid &grid);
 
 void addMazeFrame(Coords mazeCells, Grid &maze);
 
-void addSolutionFrame(std::vector<CoordsVec> &paths, Grid &maze, int frame);  // REMOVE THIS
-
 void drawButton(float x, float y, Color color);
 
 void drawDivider(Color color);
@@ -62,7 +65,13 @@ bool checkButtonClick(int cornerX, int cornerY, float x, float y);
 
 void drawPauseScreen();
 
-void resetGameState(int &mazeFrame, int &solutionFrame, bool &paused, bool &skipped, bool &sol);
+void resetGameState(
+    int &mazeFrame, 
+    int &solutionFrame, 
+    bool &paused, 
+    bool &skipped, 
+    bool &sol
+);
 
 void resetMaze(
     Grid &maze, 
@@ -71,5 +80,13 @@ void resetMaze(
     CoordsVec (*mazeGenAlgo)(),
     std::vector<CoordsVec> (*mazeSolveAlgo)(Grid)   
 );
+
+void handlePlayerMovement(Player *player, Grid maze);
+
+void movePlayer(Grid &maze, int r, int c);
+
+void removePlayer(Grid &maze, int r, int c);
+
+void resetPlayer(Player *player);
 
 #endif
