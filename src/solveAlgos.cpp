@@ -30,9 +30,11 @@ std::vector<CoordsVec> dfs(Grid maze)
             return sols;
 
         // get neighbors
-        std::vector<std::array<int, 2>> neis = {{r + 1, c}, {r - 1, c}, {r, c + 1}, {r, c - 1}};
+        std::vector<std::array<int, 2>> neis = {
+            {r + 1, c}, {r - 1, c}, {r, c + 1}, {r, c - 1}
+        };
 
-        for (auto& newCoords : neis) {
+        for (auto &newCoords : neis) {
             auto [row, col] = newCoords;
 
             if (

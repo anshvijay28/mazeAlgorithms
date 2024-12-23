@@ -19,7 +19,9 @@ int main()
     int mazeFrame, solutionFrame; 
     bool paused, skipped, sol;
     resetGameState(mazeFrame, solutionFrame, paused, skipped, sol);
-    
+
+    // init player
+    Player player = { NUM_CELLS - 1, 0 };
 
     while (!w.ShouldClose())
     {
@@ -63,6 +65,8 @@ int main()
             if (mazeFrame < mazeCells.size() - 1) 
                 continue;
 
+            removePlayer(maze, player.r, player.c);
+
             if (solutionFrame > 0)
                 removeSolutionFrame(mazeSolutions.at(solutionFrame - 1), maze);
             addSolutionFrame(mazeSolutions.at(solutionFrame), maze);
@@ -78,8 +82,12 @@ int main()
             if (mazeFrame < mazeCells.size() - 1) 
                 mazeFrame++;            
         }
-
-        // insert user position into maze here
+        
+        if (!sol && !paused && !skipped && mazeFrame == mazeCells.size() - 1)
+        {
+            handlePlayerMovement(&player, maze);
+            movePlayer(maze, player.r, player.c);
+        }
 
         paused ? drawPauseScreen() : drawGrid(maze); 
 
@@ -97,6 +105,7 @@ int main()
         {
             resetMaze(maze, mazeCells, mazeSolutions, randomizedDFS, dfs);
             resetGameState(mazeFrame, solutionFrame, paused, skipped, sol);
+            resetPlayer(&player);
         }
             
         EndDrawing();
