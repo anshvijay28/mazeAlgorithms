@@ -36,6 +36,7 @@ struct hashFunction
 using Set = std::unordered_set<Coords, hashFunction>;
 using Stack = std::stack<Coords>;
 using Pstack = std::stack<CoordsVec>;
+using Neighbors = std::vector<std::array<int, 2>>;
 
 Color getColor(int state);
 
@@ -88,5 +89,7 @@ void movePlayer(Grid &maze, int r, int c);
 void removePlayer(Grid &maze, int r, int c);
 
 void resetPlayer(Player *player);
+
+Neighbors getNeis(int r, int c, int dist);
 
 #endif

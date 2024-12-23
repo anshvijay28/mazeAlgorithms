@@ -153,33 +153,27 @@ void resetMaze(
 
 void handlePlayerMovement(Player *player, Grid maze)
 {
-    // want to be able to hold arrow keys
-
     if (
-        IsKeyDown(KEY_RIGHT) && 
-        player->c < NUM_CELLS - 1 && 
-        maze[player->r][player->c + 1]
+        (IsKeyDown(KEY_RIGHT) || IsKeyPressed(KEY_D)) && 
+        player->c < NUM_CELLS - 1 && maze[player->r][player->c + 1]
     ) 
         player->c += 1;
 
     if (
-        IsKeyDown(KEY_LEFT) && 
-        player->c > 0 && 
-        maze[player->r][player->c - 1]
+        (IsKeyDown(KEY_LEFT) || IsKeyPressed(KEY_A)) && 
+        player->c > 0 && maze[player->r][player->c - 1]
     ) 
         player->c -= 1;
 
     if (
-        IsKeyDown(KEY_UP) && 
-        player->r > 0 &&
-        maze[player->r - 1][player->c]
+        (IsKeyDown(KEY_UP) || IsKeyPressed(KEY_W)) && 
+        player->r > 0 && maze[player->r - 1][player->c]
     ) 
         player->r -= 1;
 
     if (
-        IsKeyDown(KEY_DOWN) && 
-        player->r < NUM_CELLS - 1 && 
-        maze[player->r + 1][player->c]
+        (IsKeyDown(KEY_DOWN) || IsKeyPressed(KEY_S)) && 
+        player->r < NUM_CELLS - 1 && maze[player->r + 1][player->c]
     ) 
         player->r += 1;
 }
@@ -187,9 +181,7 @@ void handlePlayerMovement(Player *player, Grid maze)
 void movePlayer(Grid &maze, int r, int c)
 {
     // erase prev position
-    std::vector<std::array<int, 2>> neis = {
-        {r + 1, c}, {r - 1, c}, {r, c + 1}, {r, c - 1}
-    };
+    Neighbors neis = getNeis(r, c, 1);
 
     for (auto &nei : neis)
     {
@@ -218,4 +210,9 @@ void resetPlayer(Player *player)
 {
     player->r = NUM_CELLS - 1;
     player->c = 0;
+}
+
+Neighbors getNeis(int r, int c, int d)
+{
+    return {{r + d, c}, {r - d, c}, {r, c + d}, {r, c - d}};
 }

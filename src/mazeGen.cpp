@@ -7,7 +7,7 @@ CoordsVec getNeighbors(Coords& curr, Set visited)
     int r = std::get<0>(curr);
     int c = std::get<1>(curr);
 
-    std::vector<std::array<int, 2>> neis = {{r + 2, c}, {r - 2, c}, {r, c + 2}, {r, c - 2}};
+    Neighbors neis = getNeis(r, c, 2);
 
     // get neighbors
     for (auto& new_coords : neis)
