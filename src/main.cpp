@@ -27,12 +27,16 @@ int main()
     while (!w.ShouldClose())
     {
         BeginDrawing();
-        ClearBackground(PURPLE);
+        ClearBackground({ 250, 240, 230, 255 });
         
         auto [x, y] = GetMousePosition();
 
         // draw maze border
         drawMazeBorder(BLACK);
+
+        // draw maze title
+        DrawText("Maze", 70, 100, 50, BLACK);
+        DrawText("Game!", 70, 150, 50, BLACK);
 
         // draw buttons
         drawButton(BUTTON_X_OFFSET, BUTTON_Y_OFFSET, RED);  // Pause
@@ -41,12 +45,16 @@ int main()
         drawButton(BUTTON_X_OFFSET, BUTTON_Y_OFFSET + 240, RED);  // Reset
         drawButton(BUTTON_X_OFFSET, BUTTON_Y_OFFSET + 320, RED);  // Restart
 
-        // draw text
+        // draw button text
         DrawText("Pause", BUTTON_X_OFFSET + 50, BUTTON_Y_OFFSET + 7, 35, BLACK);
         DrawText("Skip", BUTTON_X_OFFSET + 70, BUTTON_Y_OFFSET + 80 + 7, 35, BLACK);
         DrawText("Solution", BUTTON_X_OFFSET + 40, BUTTON_Y_OFFSET + 160 + 7, 35, BLACK);
         DrawText("Reset", BUTTON_X_OFFSET + 55, BUTTON_Y_OFFSET + 240 + 7, 35, BLACK);
         DrawText("Restart", BUTTON_X_OFFSET + 40, BUTTON_Y_OFFSET + 320 + 7, 35, BLACK);
+
+        // draw instructions text
+        DrawText("ASWD: Single Cell Moves", 45, SCREEN_HEIGHT - 70, 15, BLACK);
+        DrawText("Arrow Keys: Multi Cell Moves", 30, SCREEN_HEIGHT - 50, 15, BLACK);
         
         // win check
         if (player.r == 0 && player.c == NUM_CELLS - 1)
