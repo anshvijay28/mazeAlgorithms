@@ -19,15 +19,14 @@ constexpr Rectangle SIDEBAR = {240, 15, 10, SCREEN_HEIGHT - 30};
 constexpr int BUTTON_WIDTH = 210;
 constexpr int BUTTON_HEIGHT = 50;
 constexpr int BUTTON_X_OFFSET = 30;
-constexpr int BUTTON_Y_OFFSET = 315;
+constexpr int BUTTON_Y_OFFSET = 275;
 
 using Grid = std::array<std::array<int, NUM_CELLS>, NUM_CELLS>;
 using Coords = std::tuple<int, int>;
 using CoordsVec = std::vector<Coords>;
 struct Player 
 {
-    int r;
-    int c;
+    int r; int c; int numMoves;
 };
 struct hashFunction
 {
@@ -66,7 +65,7 @@ bool checkButtonClick(int cornerX, int cornerY, float x, float y);
 
 void drawPauseScreen();
 
-void drawWinScreen();
+void drawWinScreen(int playerMoves);
 
 void resetGameState(
     int &mazeFrame, 

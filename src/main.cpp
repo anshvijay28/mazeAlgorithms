@@ -22,7 +22,7 @@ int main()
 
     // init player
     // Player player = { NUM_CELLS - 1, 0 };
-    Player player = { 0, NUM_CELLS - 3 };
+    Player player = { 0, NUM_CELLS - 3, 0 };
 
     while (!w.ShouldClose())
     {
@@ -97,7 +97,7 @@ int main()
         }
 
         if (paused) drawPauseScreen();
-        if (win) drawWinScreen();
+        else if (win) drawWinScreen(player.numMoves);
         else drawGrid(maze);
 
         // check for button clicks
