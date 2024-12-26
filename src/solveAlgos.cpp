@@ -31,7 +31,8 @@ std::vector<CoordsVec> dfs(Grid maze)
         // get neighbors
         Neighbors neis = getNeis(r, c, 1);
 
-        for (auto &newCoords : neis) {
+        for (auto &newCoords : neis) 
+        {
             auto [row, col] = newCoords;
 
             if (
@@ -75,12 +76,12 @@ std::vector<CoordsVec> bfs(Grid maze)
 
         // add to considered solutions
         CoordsVec pathCopy(path);
-        sols.push_back(path);
+        sols.push_back(pathCopy);
 
         // check if we reached end of maze
         Coords currCell = path.at(path.size() - 1);
         int r = std::get<0>(currCell);
-        int c = std::get<0>(currCell);
+        int c = std::get<1>(currCell);
         
         if (r == 0 && c == NUM_CELLS - 1)
             return sols;
@@ -92,7 +93,6 @@ std::vector<CoordsVec> bfs(Grid maze)
         {
             auto [row, col] = newCoords;
             
-            // bounds/wall/visited check
             if (
                 row >= NUM_CELLS || row < 0 ||
                 col >= NUM_CELLS || col < 0 ||
@@ -107,9 +107,10 @@ std::vector<CoordsVec> bfs(Grid maze)
             queue.push(newPath);
             visited.insert(Coords(row, col));
         }
-    }
 
-    std::cout << "There were no valid neighbors" << std::endl;
     
+    }
+    std::cout << "There were no valid neighbors" << std::endl;
+
     return sols;
 }
