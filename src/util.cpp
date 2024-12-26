@@ -203,29 +203,24 @@ void handlePlayerMovement(Player *player, Grid maze)
         prevR < NUM_CELLS - 1 && maze[prevR + 1][prevC])
         player->r += 1;
     
+    // honest to god do not know why this is needed for the walls not to disappear
+    if (!maze[player->r][player->c])
+    {
+        player->r = prevR;
+        player->c = prevC;
+        return;
+    } 
+
     if (player->c != prevC || player->r != prevR)
         player->numMoves += 1;
 }
 
 void movePlayer(Grid &maze, int r, int c)
 {
-    // erase prev position
-    Neighbors neis = getNeis(r, c, 1);
-
-    for (auto &nei : neis)
-    {
-        auto [row, col] = nei;
-
-        if (
-            row < 0 || row == NUM_CELLS ||
-            col < 0 || col == NUM_CELLS)
-            continue;
-
-        if (maze[row][col] == 3)
-            maze[row][col] = 1;
-    }
-
     // draw new pos
+    if (!maze[r][c])
+        return;
+    
     maze[r][c] = 3;
 }
 

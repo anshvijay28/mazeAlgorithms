@@ -34,7 +34,8 @@ struct hashFunction
 };
 using Set = std::unordered_set<Coords, hashFunction>;
 using Stack = std::stack<Coords>;
-using Pstack = std::stack<CoordsVec>;
+using PathStack = std::stack<CoordsVec>;
+using PathQueue = std::queue<CoordsVec>;
 using Neighbors = std::vector<std::array<int, 2>>;
 
 Color getColor(int state);

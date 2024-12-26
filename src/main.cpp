@@ -98,7 +98,7 @@ int main()
                 mazeFrame++;            
         }
         
-        if (!sol && !paused && !skipped && mazeFrame == mazeCells.size() - 1)
+        if (!sol && !paused && !skipped && !win && mazeFrame == mazeCells.size() - 1)
         {
             handlePlayerMovement(&player, maze);
             movePlayer(maze, player.r, player.c);
