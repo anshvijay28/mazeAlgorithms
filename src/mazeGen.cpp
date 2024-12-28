@@ -14,14 +14,14 @@ CoordsVec getNeighbors(Coords& curr, Set visited)
     {
         auto [row, col] = new_coords;
         
-        // bounds check
-        if (row < 0 || row >= NUM_CELLS || col < 0 || col >= NUM_CELLS) 
-            continue;
-
-        // visited check
         Coords coords(row, col);
 
-        if (visited.count(coords)) 
+        // bounds check
+        if (
+            row < 0 || row >= NUM_CELLS ||
+            col < 0 || col >= NUM_CELLS ||
+            visited.count(coords)
+        ) 
             continue;
         
         // add valid neighbor
@@ -58,7 +58,7 @@ CoordsVec randomizedDFS()
         }
         
         // pick a random neighbor
-        Coords neighbor = neighbors.at(std::rand() % neighbors.size());
+        Coords neighbor = neighbors[std::rand() % neighbors.size()];
 
         // get curr and neighbor r, c
         int curr_r = std::get<0>(curr);
@@ -81,5 +81,71 @@ CoordsVec randomizedDFS()
         visited.insert(neighbor);
     }
 
+    return mazeCells;
+}
+
+Coords find(Coords cell, std::map<Coords, Coords> &parents) 
+{   
+    while (!coordsEqual(cell, parents[cell]))
+    {
+        parents[cell] = parents[parents[cell]]; // path compression
+        cell = parents[cell];
+    }
+    return cell;
+}
+
+void union_(
+    Coords p1, 
+    Coords p2, 
+    std::map<Coords, Coords> &parents, 
+    std::map<Coords, int> &rank)
+{   
+    if (rank[p1] > rank[p2])
+    {
+        parents[p2] = p1;
+    }
+    else if (rank[p1] < rank[p2]) 
+    {
+        parents[p1] = p2;    
+    }
+    else
+    {
+        parents[p2] = p1;
+        rank[p1]++;
+    }
+}
+
+CoordsVec randomizedKruskals()
+{
+    CoordsVec mazeCells;
+    CoordsVec cells = getCells();
+    CoordsVec walls = shuffleWalls(getWalls());    
+    std::map<Coords, Coords> parents;
+    std::map<Coords, int> rank;
+
+    // init sets and rank for each cell
+    for (auto &cell : cells)
+    {
+        parents[cell] = cell;
+        rank[cell] = 0;
+    }
+
+    // iterate through each wall
+    for (auto &wall : walls)
+    {
+        auto [r, c] = wall;
+
+        std::array<Coords, 2> adjCells = getAdjCells(r, c);
+
+        // check if both cells belong to different sets
+        Coords p1 = find(adjCells[0], parents);
+        Coords p2 = find(adjCells[1], parents);
+
+        if (!coordsEqual(p1, p2))
+        {
+            union_(p1, p2, parents, rank);
+            mazeCells.push_back(wall);
+        }           
+    }
     return mazeCells;
 }

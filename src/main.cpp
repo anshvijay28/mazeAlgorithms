@@ -13,7 +13,7 @@ int main()
     Grid maze, finishedMaze;
     CoordsVec mazeCells;
     std::vector<CoordsVec> mazeSolutions;
-    resetMaze(maze, mazeCells, mazeSolutions, randomizedDFS, dfs);
+    resetMaze(maze, mazeCells, mazeSolutions, randomizedKruskals, dfs);
 
     // init game state
     int mazeFrame, solutionFrame; 
@@ -71,7 +71,7 @@ int main()
             }
             else if (solutionFrame < mazeSolutions.size() - 1 && sol) 
             {
-                removeSolutionFrame(mazeSolutions.at(solutionFrame), maze);
+                removeSolutionFrame(mazeSolutions[solutionFrame], maze);
                 solutionFrame = mazeSolutions.size() - 1;
             }
             skipped = false;
@@ -82,16 +82,16 @@ int main()
                 continue;
 
             if (solutionFrame > 0)
-                removeSolutionFrame(mazeSolutions.at(solutionFrame - 1), maze);
-            addSolutionFrame(mazeSolutions.at(solutionFrame), maze);
+                removeSolutionFrame(mazeSolutions[solutionFrame - 1], maze);
+            addSolutionFrame(mazeSolutions[solutionFrame], maze);
             
             if (solutionFrame < mazeSolutions.size() - 1) 
                 solutionFrame++;
         }
         else
         {   
-            removeSolutionFrame(mazeSolutions.at(solutionFrame), maze);
-            addMazeFrame(mazeCells.at(mazeFrame), maze);
+            removeSolutionFrame(mazeSolutions[solutionFrame], maze);
+            addMazeFrame(mazeCells[mazeFrame], maze);
 
             if (mazeFrame < mazeCells.size() - 1) 
                 mazeFrame++;            
@@ -102,7 +102,7 @@ int main()
             handlePlayerMovement(&player, maze);
             movePlayer(maze, player.r, player.c);
         }
-
+        // drawGrid(mazeTest);
         if (paused) drawPauseScreen();
         else if (win) drawWinScreen(player.numMoves);
         else drawGrid(maze);
@@ -127,7 +127,7 @@ int main()
         }
         else if ((!win && restartClick) || (win && winRestartClick))
         {
-            resetMaze(maze, mazeCells, mazeSolutions, randomizedDFS, dfs);
+            resetMaze(maze, mazeCells, mazeSolutions, randomizedKruskals, dfs);
             resetGameState(mazeFrame, solutionFrame, paused, skipped, sol, win);
             resetPlayer(&player);
 

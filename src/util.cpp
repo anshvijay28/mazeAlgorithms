@@ -239,3 +239,65 @@ Neighbors getNeis(int r, int c, int d)
 {
     return {{r + d, c}, {r - d, c}, {r, c + d}, {r, c - d}};
 }
+
+CoordsVec getWalls()
+{  
+    CoordsVec walls;
+
+    for (int r = 0; r < NUM_CELLS; r++)
+    {
+        for (int c = 0; c < NUM_CELLS; c++)
+        {
+            if (r % 2 != c % 2)
+                walls.push_back(Coords(r, c));
+        }
+    }
+    return walls;
+}
+
+CoordsVec getCells()
+{
+    CoordsVec cells;
+    for (int r = 0; r < NUM_CELLS; r += 2)
+    {
+        for (int c = 0; c < NUM_CELLS; c += 2)
+        {
+            cells.push_back(Coords(r, c));
+        }
+    }
+    return cells;
+}
+
+std::array<Coords, 2> getAdjCells(int r, int c)
+{
+    if (r % 2 == 1)
+    {
+        if (c % 2 == 1)
+            {
+                std::cout << "Invalid wall" << std::endl;
+                return std::array<Coords, 2>();
+            }
+        return {Coords(r - 1, c), Coords(r + 1, c)};
+    }
+    return {Coords(r, c - 1), Coords(r, c + 1)};
+}
+
+std::vector<Coords> shuffleWalls(CoordsVec walls)
+{
+    std::random_device rd; // Seed
+    std::mt19937 g(rd());  // Random number generator
+    std::shuffle(walls.begin(), walls.end(), g);
+
+    return walls;
+}
+
+void printCoord(Coords coord)
+{
+    std::cout << "(" << std::get<0>(coord) << "," << std::get<1>(coord) << ")" << std::endl;
+}
+
+bool coordsEqual(Coords a, Coords b)
+{
+    return std::get<0>(a) == std::get<0>(b) && 
+           std::get<1>(a) == std::get<1>(b);
+}
