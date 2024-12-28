@@ -21,7 +21,7 @@ std::vector<CoordsVec> dfs(Grid maze)
         sols.push_back(pathCopy);
 
         // check if current path reached destination
-        Coords currCell = path.at(path.size() - 1);
+        Coords currCell = path[path.size() - 1];
         int r = std::get<0>(currCell);
         int c = std::get<1>(currCell);
         
@@ -79,7 +79,7 @@ std::vector<CoordsVec> bfs(Grid maze)
         sols.push_back(pathCopy);
 
         // check if we reached end of maze
-        Coords currCell = path.at(path.size() - 1);
+        Coords currCell = path[path.size() - 1];
         int r = std::get<0>(currCell);
         int c = std::get<1>(currCell);
         
@@ -107,8 +107,6 @@ std::vector<CoordsVec> bfs(Grid maze)
             queue.push(newPath);
             visited.insert(Coords(row, col));
         }
-
-    
     }
     std::cout << "There were no valid neighbors" << std::endl;
 

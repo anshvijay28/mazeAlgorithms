@@ -7,6 +7,9 @@
 #include <stdlib.h>
 #include <iostream>
 #include <raylib-cpp.hpp>
+#include <algorithm>
+#include <random>
+#include <map>
 
 constexpr int BORDER_SIZE = 20;
 constexpr int CELL_SIZE = 15;
@@ -94,5 +97,17 @@ void removePlayer(Grid &maze, int r, int c);
 void resetPlayer(Player *player);
 
 Neighbors getNeis(int r, int c, int dist);
+
+CoordsVec getWalls();
+
+CoordsVec getCells();
+
+std::array<Coords, 2> getAdjCells(int r, int c);
+
+std::vector<Coords> shuffleWalls(CoordsVec walls);
+
+void printCoord(Coords coord);
+
+bool coordsEqual(Coords a, Coords b);
 
 #endif
