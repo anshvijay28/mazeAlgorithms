@@ -110,4 +110,6 @@ void printCoord(Coords coord);
 
 bool coordsEqual(Coords a, Coords b);
 
+int getNumCells();
+
 #endif

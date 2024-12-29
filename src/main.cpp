@@ -13,7 +13,7 @@ int main()
     Grid maze, finishedMaze;
     CoordsVec mazeCells;
     std::vector<CoordsVec> mazeSolutions;
-    resetMaze(maze, mazeCells, mazeSolutions, randomizedKruskals, dfs);
+    resetMaze(maze, mazeCells, mazeSolutions, prims, dfs);
 
     // init game state
     int mazeFrame, solutionFrame; 
@@ -22,6 +22,10 @@ int main()
 
     // init player
     Player player = { NUM_CELLS - 1, 0 };
+
+    // for testing
+    // Grid mazeTest = initGrid();
+    // uncomment 109 and comment out the 3 lines below
 
     while (!w.ShouldClose())
     {
@@ -127,7 +131,7 @@ int main()
         }
         else if ((!win && restartClick) || (win && winRestartClick))
         {
-            resetMaze(maze, mazeCells, mazeSolutions, randomizedKruskals, dfs);
+            resetMaze(maze, mazeCells, mazeSolutions, kruskals, dfs);
             resetGameState(mazeFrame, solutionFrame, paused, skipped, sol, win);
             resetPlayer(&player);
 
