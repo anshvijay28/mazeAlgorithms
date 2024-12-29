@@ -22,8 +22,7 @@ std::vector<CoordsVec> dfs(Grid maze)
 
         // check if current path reached destination
         Coords currCell = path[path.size() - 1];
-        int r = std::get<0>(currCell);
-        int c = std::get<1>(currCell);
+        auto [r, c] = currCell;
         
         if (r == 0 && c == NUM_CELLS - 1) 
             return sols;
@@ -35,11 +34,9 @@ std::vector<CoordsVec> dfs(Grid maze)
         {
             auto [row, col] = newCoords;
 
-            if (
-                row >= NUM_CELLS || row < 0 || 
+            if (row >= NUM_CELLS || row < 0 || 
                 col >= NUM_CELLS || col < 0 || 
-                !maze[row][col] || visited.count(Coords(row, col))
-            )
+                !maze[row][col] || visited.count(Coords(row, col)))
                 continue;
 
             // valid neighbor case
@@ -80,8 +77,7 @@ std::vector<CoordsVec> bfs(Grid maze)
 
         // check if we reached end of maze
         Coords currCell = path[path.size() - 1];
-        int r = std::get<0>(currCell);
-        int c = std::get<1>(currCell);
+        auto [r, c] = currCell;
         
         if (r == 0 && c == NUM_CELLS - 1)
             return sols;
@@ -93,11 +89,9 @@ std::vector<CoordsVec> bfs(Grid maze)
         {
             auto [row, col] = newCoords;
             
-            if (
-                row >= NUM_CELLS || row < 0 ||
+            if (row >= NUM_CELLS || row < 0 ||
                 col >= NUM_CELLS || col < 0 ||
-                !maze[row][col] || visited.count(Coords(row, col))
-            )
+                !maze[row][col] || visited.count(Coords(row, col)))
                 continue;
             
             // valid neigbor case

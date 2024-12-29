@@ -1,11 +1,10 @@
 #include "mazeGen.h"
 
-CoordsVec getNeighbors(Coords& curr, Set visited) 
+CoordsVec getValidNeighbors(Coords &curr, Set visited) 
 {
     CoordsVec neighbors;
 
-    int r = std::get<0>(curr);
-    int c = std::get<1>(curr);
+    auto [r, c] = curr;
 
     Neighbors neis = getNeis(r, c, 2);
 
@@ -17,11 +16,9 @@ CoordsVec getNeighbors(Coords& curr, Set visited)
         Coords coords(row, col);
 
         // bounds check
-        if (
-            row < 0 || row >= NUM_CELLS ||
+        if (row < 0 || row >= NUM_CELLS ||
             col < 0 || col >= NUM_CELLS ||
-            visited.count(coords)
-        ) 
+            visited.count(coords)) 
             continue;
         
         // add valid neighbor
@@ -49,7 +46,7 @@ CoordsVec randomizedDFS()
     {
         Coords curr = S.top();
 
-        CoordsVec neighbors = getNeighbors(curr, visited);        
+        CoordsVec neighbors = getValidNeighbors(curr, visited);        
     
         if (!neighbors.size()) 
         {
@@ -115,7 +112,7 @@ void union_(
     }
 }
 
-CoordsVec randomizedKruskals()
+CoordsVec kruskals()
 {
     CoordsVec mazeCells;
     CoordsVec cells = getCells();
@@ -147,5 +144,86 @@ CoordsVec randomizedKruskals()
             mazeCells.push_back(wall);
         }           
     }
+    return mazeCells;
+}
+
+CoordsVec prims()
+{
+    CoordsVec mazeCells;
+    Set visited;
+    CoordsVec walls;
+    int numCells = getNumCells();
+    
+    // randomly select a starting cell
+    int r = (std::rand() % (NUM_CELLS / 2)) * 2;
+    int c = (std::rand() % (NUM_CELLS / 2)) * 2;
+    Coords initCell(r, c);
+
+    // add it to visited set
+    visited.insert(initCell);
+
+    // add all 2-4 of its adjacent walls to walls list
+    Neighbors initWalls = getNeis(r, c, 1);
+
+    for (auto &wall : initWalls)
+    {
+        auto [row, col] = wall;
+        
+        if (row < 0 || row >= NUM_CELLS ||
+            col < 0 || col >= NUM_CELLS)
+            continue;
+
+        walls.push_back(Coords(row, col));
+    }
+    
+    while (visited.size() < numCells)
+    {
+        int randIdx = std::rand() % walls.size();
+        auto [row, col] = walls[randIdx];
+        std::array<Coords, 2> adjCells = getAdjCells(row, col);
+
+        while (visited.count(adjCells[0]) && visited.count(adjCells[1]))
+        {  
+            // Useless to consider this wall since both cells have been visited
+            walls.erase(walls.begin() + randIdx);
+
+            // pick new wall
+            randIdx = std::rand() % walls.size();
+            auto [row, col] = walls[randIdx];
+            adjCells = getAdjCells(row, col);
+        }
+
+        // add wall to maze
+        Coords pickedWall = walls[randIdx];
+        mazeCells.push_back(pickedWall);
+        
+        // determine the unvisited cell
+        int unvisitedIdx = visited.count(adjCells[0]) ? 1 : 0;
+
+        // add walls of unvisited cell into walls list
+        auto [r, c] = adjCells[unvisitedIdx];
+        Neighbors neis = getNeis(r, c, 1);
+        auto [pickedRow, pickedCol] = pickedWall;
+
+        for (auto &wall : neis)
+        {
+            auto [row, col] = wall;
+
+            // bounds check and check if its the wall to be removed
+            if (row < 0 || row >= NUM_CELLS ||
+                col < 0 || col >= NUM_CELLS ||
+                (row == pickedRow && col == pickedCol))
+                continue;
+
+            walls.push_back(Coords(row, col));
+        }
+
+        // finally, remove the picked wall
+        walls.erase(walls.begin() + randIdx);
+
+        // add the unvisited cell to the visited set
+        visited.insert(adjCells[unvisitedIdx]);
+    }
+    
     return mazeCells;
 }

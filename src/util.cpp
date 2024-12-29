@@ -62,8 +62,7 @@ Grid initGrid()
     {
         for (int j = 0; j < NUM_CELLS; j++)
         {
-            int val = i % 2 == 1 ? 0 : (i + j) % 2 == 0 ? 1
-                                                        : 0;
+            int val = i % 2 == 1 ? 0 : (i + j) % 2 == 0 ? 1 : 0;
             grid[i][j] = val;
         }
     }
@@ -183,23 +182,19 @@ void handlePlayerMovement(Player *player, Grid maze)
     int prevR = player->r;
     int prevC = player->c;
 
-    if (
-        (IsKeyDown(KEY_RIGHT) || IsKeyPressed(KEY_D)) &&
+    if ((IsKeyDown(KEY_RIGHT) || IsKeyPressed(KEY_D)) &&
         prevC < NUM_CELLS - 1 && maze[prevR][prevC + 1])
         player->c += 1;
 
-    if (
-        (IsKeyDown(KEY_LEFT) || IsKeyPressed(KEY_A)) &&
+    if ((IsKeyDown(KEY_LEFT) || IsKeyPressed(KEY_A)) &&
         prevC > 0 && maze[prevR][prevC - 1])
         player->c -= 1;
 
-    if (
-        (IsKeyDown(KEY_UP) || IsKeyPressed(KEY_W)) &&
+    if ((IsKeyDown(KEY_UP) || IsKeyPressed(KEY_W)) &&
         prevR > 0 && maze[prevR - 1][prevC])
         player->r -= 1;
 
-    if (
-        (IsKeyDown(KEY_DOWN) || IsKeyPressed(KEY_S)) &&
+    if ((IsKeyDown(KEY_DOWN) || IsKeyPressed(KEY_S)) &&
         prevR < NUM_CELLS - 1 && maze[prevR + 1][prevC])
         player->r += 1;
     
@@ -291,7 +286,7 @@ std::vector<Coords> shuffleWalls(CoordsVec walls)
     return walls;
 }
 
-void printCoord(Coords coord)
+void printCoord(Coords coord) // for debugging
 {
     std::cout << "(" << std::get<0>(coord) << "," << std::get<1>(coord) << ")" << std::endl;
 }
@@ -300,4 +295,17 @@ bool coordsEqual(Coords a, Coords b)
 {
     return std::get<0>(a) == std::get<0>(b) && 
            std::get<1>(a) == std::get<1>(b);
+}
+
+int getNumCells()
+{
+    int numCells = 0;
+    Grid temp = initGrid();
+
+    for (int r = 0; r < NUM_CELLS; r++)
+    {
+        for (int c = 0; c < NUM_CELLS; c++)
+            if (temp[r][c]) numCells++;
+    }
+    return numCells;
 }
