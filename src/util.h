@@ -47,6 +47,8 @@ void addSolutionFrame(CoordsVec &path, Grid &maze);
 
 void removeSolutionFrame(CoordsVec &path, Grid &maze);
 
+void prevSolutionFullRemoval(Grid &maze);
+
 void finishMaze(CoordsVec mazeCells, Grid &maze);
 
 Grid getFinishedMaze(CoordsVec mazeCells, Grid maze);

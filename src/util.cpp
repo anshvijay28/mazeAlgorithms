@@ -29,6 +29,17 @@ void removeSolutionFrame(CoordsVec &path, Grid &maze)
         maze[std::get<0>(coord)][std::get<1>(coord)] = 1;
 }
 
+void prevSolutionFullRemoval(Grid &maze)
+{
+    for (int r = 0; r < NUM_CELLS; r++)
+    {
+        for (int c = 0; c < NUM_CELLS; c++)
+        {
+            if (maze[r][c] == 2) maze[r][c] = 1;
+        }
+    }
+}
+
 void finishMaze(CoordsVec mazeCells, Grid &maze)
 {
     for (Coords &coord : mazeCells)
